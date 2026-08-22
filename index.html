@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Game of LIFE: Welcome to the Cis Supremacy</title>
+    <script src="index.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="margin:0; padding:0;">
+    <div id="gameplay" style="padding-left:5px">
+        <div class="uncontrollably-controllable" id="life_stats">
+            <p>Money: <span id="monies"></span></p>
+            <p>Mental Health: <progress id="mental_health" max="100" value="100">100%</progress></p>
+            <p>Physical Health: <progress id="physical_health" max="100" value="100">100%</progress></p>
+        </div>
+        <p>Age: <span id="age">0</span></p>
+        <p>Is Out as Trans: <span id="out">NO</span></p>
+
+        <button id="soy_trans" onclick="how_i_learned_to_stop_worrying_and_love_the_bomb()">i am trans</button>
+        <div id="soy_trans_response"></div>
+
+
+        <button id="get_older" onclick="growUp()">get older</button>
+    </div>
+    <img src="imgs/conways.png" alt="Conway's Game of Life" id="conways_game_of_life">
+</body>
+</html>
