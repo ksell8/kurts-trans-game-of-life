@@ -1,0 +1,22 @@
+{
+  "name": "trans-game",
+  "version": "1.0.0",
+  "description": "fight for your life",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ksell8/kurts-trans-game-of-life.git"
+  },
+  "author": "kurt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ksell8/kurts-trans-game-of-life/issues"
+  },
+  "homepage": "https://github.com/ksell8/kurts-trans-game-of-life#readme",
+  "dependencies": {
+    "woah.css": "^1.3.1"
+  }
+}

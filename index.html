@@ -2,26 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>The Game of LIFE: Welcome to the Cis Supremacy</title>
     <script src="index.js" defer></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dawning+of+a+New+Day&family=Metal+Mania&family=Special+Elite&family=Caprasimo&display=swap" rel="stylesheet">
 </head>
 <body style="margin:0; padding:0;">
-    <div id="gameplay" style="padding-left:5px">
+    <div id="game_play" class="game" hidden aria-hidden="true">
+        <div id="soy_trans_response"></div>
+    </div>
+    <div id="game_opening" class="game" hidden aria-hidden="true">
+        <video id="intro-video" playsinline width="640" height="360">
+            <source src="imgs/you-gotta-be-fucking-kidding.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div id="game_prelude" class="game">
+    </div>
+    <div id="button_panel" hidden aria-hidden="true">
+        <button id="soy_trans" onclick="how_i_learned_to_stop_worrying_and_love_the_bomb()">wahhhhhhh</button>
+        <button id="get_older" onclick="growUp()">get older</button>
+    </div>
+    <div id="stats_panel" hidden aria-hidden="true">
         <div class="uncontrollably-controllable" id="life_stats">
             <p>Money: <span id="monies"></span></p>
             <p>Mental Health: <progress id="mental_health" max="100" value="100">100%</progress></p>
             <p>Physical Health: <progress id="physical_health" max="100" value="100">100%</progress></p>
         </div>
         <p>Age: <span id="age">0</span></p>
+        <p>Number of Times Asserted Truth: <span id="truth">0</span></p>
         <p>Is Out as Trans: <span id="out">NO</span></p>
-
-        <button id="soy_trans" onclick="how_i_learned_to_stop_worrying_and_love_the_bomb()">i am trans</button>
-        <div id="soy_trans_response"></div>
-
-
-        <button id="get_older" onclick="growUp()">get older</button>
     </div>
-    <img src="imgs/conways.png" alt="Conway's Game of Life" id="conways_game_of_life">
+    <div id="game_over" class="game" hidden aria-hidden="true"></div>
 </body>
 </html>

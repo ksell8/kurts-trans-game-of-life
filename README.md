@@ -15,9 +15,7 @@
   of your life, but also getting closer to the time in which everyone
   stops giving and absolute fuck about you, so you're free to be whoever you want.
 
-  There's probably an ideal way to play the game.  It helps if you open the console.
-
-  You at least know what you're up against.
+  There's probably an ideal way to play the game.  It helps if you open the console. At least then, you know what you're up against.
 
   I don't really know where the conditions I put on this game came from.
   I was kinda high and I just put what I put.
@@ -34,10 +32,10 @@
 
   Whenever I tell people they don't have free will, they seem to believe I'd be able to predict their future.
   But determinism does not entail omniscience.
+
   There are really n different variables that go into the mental and physical health of a human being.
   I decided to focus on gender and money.  The money maths aren't mathing right now, you only ever really make money.
   But there is an American dream of sorts.
 
   I do find this to be more accurate to our experience than Conway's life.  In Conway's you choose the start state
   of the universe and let it run.  But, we don't choose our start.  And our start binds our choices, until we really have none.
-*/

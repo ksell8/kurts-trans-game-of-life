@@ -1,0 +1,146 @@
+body {
+    position: relative;
+    min-height: 100vh;
+    width: max-content;
+    min-width: 100vw;
+    display: flex;
+    align-items: center;
+    background-image: url('../imgs/conways.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat;
+}
+
+
+
+.game {
+    box-sizing: border-box;
+    width: max-content;
+    margin: 40px auto;
+
+    color: white;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+#button_panel[hidden] {
+    display: none;
+}
+
+#button_panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    box-sizing: border-box;
+    overflow-x: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    background-color: deeppink;
+}
+
+#button_panel button {
+    flex-shrink: 0;
+}
+
+#stats_panel[hidden] {
+    display: none;
+}
+
+#stats_panel {
+    position: fixed;
+    top: 90px;
+    right: 0;
+    bottom: 0;
+    width: 260px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: deepskyblue;
+}
+
+.devil{
+    font-family: "Metal Mania", serif;
+    color: red;
+}
+
+.typewriter{
+    overflow: hidden; /* Ensures the content is not revealed until the animation */
+    white-space: nowrap; /* Keeps the content on a single line */
+    margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+    letter-spacing: .15em; /* Adjust as needed */
+    animation: typing 3.5s steps(40, end) forwards;
+}
+
+/* The typing effect */
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+p {
+    color: white;
+    text-align: center;
+    font-family: 'Caprasimo', sans-serif;
+}
+
+button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button.darks {
+    background-color: black;
+    color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    font-family: "Special Elite", system-ui;
+    font-weight: 400;
+    font-size: 46px;
+    font-style: normal;
+}
+
+button.pretty {
+    background-color: #ff69b4;
+    color: white;
+    box-shadow: 0 4px 6px rgba(255, 105, 180, 0.2);
+    font-family: "Dawning of a New Day", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 46px;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+button.pretty:hover {
+    background-color: #ff4da6;
+}
+
+button.darks:hover {
+    background-color: gray;
+}
+
+/* Active State (Button click) */
+button:active {
+    transform: translateY(1px); /* Pushes button down on click */
+    box-shadow: 0 2px 4px rgba(255, 105, 180, 0.2);
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
