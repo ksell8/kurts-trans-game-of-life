@@ -44,8 +44,9 @@
 ## Deployment
 
 Every push to `main` publishes the game to https://trippyhippies.org/trans-game/
-with [s3deploy](https://github.com/bep/s3deploy) (`.github/workflows/deploy.yml`).
-Pull requests only check that the site files can be staged. The workflow signs in
+with [s3deploy](https://github.com/bep/s3deploy), run through the
+[ksell8/s3-deploy](https://github.com/ksell8/s3-deploy) action (`.github/workflows/deploy.yml`).
+Pull requests only check that the site files can be staged and that the action installs s3deploy. The workflow signs in
 to AWS with GitHub OIDC, so no AWS keys are stored in GitHub. Set these repository
 variables (Settings > Secrets and variables > Actions > Variables); all four are
 required and the deploy fails if one is missing:
