@@ -13,6 +13,39 @@
 // and being outta whack makes it harder to review (me entiendes)
 // and I guess all those industry fucks can go fuck themselves because they can't understand me no matter how I write
 // and I like to write like this
+// i get knocked down but i get up again
+// pissing the night away
+const scary_text = [
+    "Welcome to the Cis Supremacy!",
+    "Your life will be underwhelmingly absurd.",
+    "From now on everyone in your life will assume you are a girl.",
+    "You are actually a trans male.",
+    "They will place expectations on you in line with patriarchal femininity.",
+    "You won't notice at first.",
+    "But it'll soon be undeniable.",
+    "You aren't treated like the other boys.",
+    "You won't have the words to say who you are.",
+    "No one will tell you trans people exist.",
+    "That knowledge is considered unsuitable for kids in this place.",
+    "In this game you can choose to get older.",
+    "To get older is to become more knowledgeable & gain autonomy.",
+    "Thus making it easier to be taken seriously as a trans person.",
+    "But getting older also takes a toll.",
+    "And getting older while living a lie takes an even bigger toll.",
+    "So be careful getting older without speaking your truth.",
+    "That is, in whatever capacity you have to speak it.",
+    "The truth can come out in any number of ways.",
+    "Wanting to be a boy in the school play.",
+    "Pitching a fit when someone puts you in a dress.",
+    "(I quite like dresses now, no PANTS.)",
+    "Playing house and always being the dad.",
+    "One thing is for sure.",
+    "Pretending to be someone who you are not in order to please an unaccepting world",
+    "will only make you sad......",
+    "sad until you",
+    "DIE"
+]
+
 let num_of_times_pushed_truth = 0
 let is_out = false
 let has_support = false
@@ -474,38 +507,6 @@ function play_on(){
 
 function i_fucking_hate_being_alive(){
     const game_opening = document.getElementById("game_opening")// why am I not using camel case WHY DOES IT MADDER (I like it more than the t's right now, this game is making me mad)
-    // i get knocked down but i get up again
-    // pissing the night away
-    const scary_text = [
-        "Welcome to the Cis Supremacy!",
-        "Your life will be underwhelmingly absurd.",
-        "From now on everyone in your life will assume you are a girl.",
-        "You are actually a trans male.",
-        "They will place expectations on you in line with patriarchal femininity.",
-        "You won't notice at first.",
-        "But it'll soon be undeniable.",
-        "You aren't treated like the other boys.",
-        "You won't have the words to say who you are.",
-        "No one will tell you trans people exist.",
-        "That knowledge is considered unsuitable for kids in this place.",
-        "In this game you can choose to get older.",
-        "To get older is to become more knowledgeable & gain autonomy.",
-        "Thus making it easier to be taken seriously as a trans person.",
-        "But getting older also takes a toll.",
-        "And getting older while living a lie takes an even bigger toll.",
-        "So be careful getting older without speaking your truth.",
-        "That is, in whatever capacity you have to speak it.",
-        "The truth can come out in any number of ways.",
-        "Wanting to be a boy in the school play.",
-        "Pitching a fit when someone puts you in a dress.",
-        "(I quite like dresses now, no PANTS.)",
-        "Playing house and always being the dad.",
-        "One thing is for sure.",
-        "Pretending to be someone who you are not in order to please an unaccepting world",
-        "will only make you sad......",
-        "sad until you",
-        "DIE"
-    ]
     let i = 0
     for(const text of scary_text){
         let h1Element;
@@ -513,6 +514,8 @@ function i_fucking_hate_being_alive(){
             h1Element = add_h1(game_opening,
                 text,
                 ["devil", "typewriter"]);
+            // the whole story is already in #a11y_narration, so screen readers skip the fading copy
+            h1Element.ariaHidden = "true";
         },
             i*5000)
         i++;
@@ -582,10 +585,8 @@ function add_image(element, image_source, alt_text, width= 100, classes=[]){
     return image
 }
 
-// TODO: add a static, visually-hidden block of text containing the full
-// intro narration up front, then mark the dynamically added elements below (and other
-// add_h1/add_image/add_button calls throughout this file) as aria-hidden so screen readers
-// get the whole intro at once instead of piecemeal as it's typed/appended.
+// The text that fades in and gets removed (scary_text) is also written out once in the
+// visually-hidden #a11y_narration block (see fill_a11y_story), and the fading copies are aria-hidden.
 // TODO: test with a screen reader and a friend who should use a screen reader but doesn't and can't see the fucking screen
 // I think the text will have to change.  Just make the background not see through
 // This is a must do before I show anyone
@@ -669,3 +670,14 @@ function opening(index=0, source){
         you_gotta_be_fucking_kidding();
     }
 }
+
+// writes the story into the visually-hidden accessibility block so it can be read without the fade in
+function fill_a11y_story(){
+    const story = document.getElementById("a11y_story")
+    for(const text of scary_text){
+        const li = document.createElement("li")
+        li.innerText = text
+        story.appendChild(li)
+    }
+}
+fill_a11y_story()
