@@ -59,7 +59,7 @@ jobs:
       # requests catch a broken action pin before it reaches main.
       - name: Check the s3-deploy action installs s3deploy
         id: s3deploy
-        uses: ksell8/s3-deploy@33ac28b756d44d5f96764740d0f46714308ed0d4
+        uses: ksell8/s3-deploy@v1
         with:
           install-only: true
       - run: s3deploy -V
@@ -104,11 +104,9 @@ jobs:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
 
-      # ksell8/s3-deploy has no release tag yet, so this is pinned to the commit
-      # that merged its first version (ksell8/s3-deploy#2). Switch to @v1 once tagged.
       # The s3deploy version comes from the action (its s3deploy-version/go.mod).
       - name: Deploy
-        uses: ksell8/s3-deploy@33ac28b756d44d5f96764740d0f46714308ed0d4
+        uses: ksell8/s3-deploy@v1
         env:
           S3DEPLOY_SOURCE: _site
           S3DEPLOY_BUCKET: ${{ vars.S3_BUCKET }}
