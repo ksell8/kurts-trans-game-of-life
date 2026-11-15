@@ -46,6 +46,26 @@ const scary_text = [
     "DIE"
 ]
 
+// Dynamic text lives in data/*.json (issue #8). Each file is fetched once at startup;
+// until it arrives (or if it can't be loaded) the game falls back to its default text.
+// fetch() needs the page served over http(s): open it with a local server, not file://.
+function loadText(name){
+    return fetch(`data/${name}.json`)
+        .then((res) => {
+            if(!res.ok){
+                throw new Error(`${res.status} ${res.statusText}`)
+            }
+            return res.json()
+        })
+        .catch((err) => {
+            console.error(`Could not load data/${name}.json:`, err)
+            return {}
+        })
+}
+
+let mean_things = {}
+loadText("mean_things").then((data) => { mean_things = data })
+
 let num_of_times_pushed_truth = 0
 let is_out = false
 let has_support = false
@@ -152,51 +172,6 @@ function trans_people_dont_know_theyre_trans_but_cis_people_can_know_theyre_cis(
 }
 
 function negativeUnder18(){
-    const mean_things = {
-        0: [
-            {
-                "text": "Mother, they're still not sure it is a baby!",
-                "image": {
-                    "alt": "Eraserhead baby",
-                    "src": "imgs/eraserhead.png",
-                    "classes":[],
-                }
-            },
-            {
-                "text": "Our beautiful baby girl.",
-                "image": {
-                    "alt": "Crying cat",
-                    "src": "imgs/crying.jpg",
-                    "classes":[],
-                }
-            },
-            {
-                "text": "You're born naked and everything you put on after that is drag. - RuPaul"
-            }
-        ],
-        1: [
-            {
-                "text": "Mother, they're still not sure it is a baby!",
-                "image": {
-                    "alt": "Eraserhead baby",
-                    "src": "imgs/eraserhead.png",
-                    "classes":[],
-                }
-            },
-            {
-                "text": "Our beautiful baby girl.",
-                "image": {
-                    "alt": "Crying cat",
-                    "src": "imgs/crying.jpg",
-                    "classes":[],
-                }
-            },
-            {
-                "text": "You're born naked and everything you put on after that is drag. - RuPaul"
-            }
-        ],
-    }
-
     const age = getAge()
     const current_mean_things = mean_things[age]
     if(current_mean_things){

@@ -41,6 +41,17 @@
   of the universe and let it run.  But, we don't choose our start.  And our start binds our choices, until we really have none.
 
 
+## Game text
+
+Text the game shows is moving into JSON files in `data/` so it can be edited without
+touching `index.js`. So far `data/mean_things.json` holds the mean things people say to
+you while you're under 18, keyed by age; each entry has a `text` and an optional `image`
+(`src`, `alt`, `classes`).
+
+`index.js` loads these files with `fetch()`, so open the game through a web server
+(for example `python3 -m http.server` in this folder, then http://localhost:8000/),
+not straight from disk.
+
 ## Deployment
 
 Every push to `main` publishes the game to https://trippyhippies.org/trans-game/

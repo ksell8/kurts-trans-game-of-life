@@ -1,0 +1,44 @@
+{
+  "0": [
+    {
+      "text": "Mother, they're still not sure it is a baby!",
+      "image": {
+        "alt": "Eraserhead baby",
+        "src": "imgs/eraserhead.png",
+        "classes": []
+      }
+    },
+    {
+      "text": "Our beautiful baby girl.",
+      "image": {
+        "alt": "Crying cat",
+        "src": "imgs/crying.jpg",
+        "classes": []
+      }
+    },
+    {
+      "text": "You're born naked and everything you put on after that is drag. - RuPaul"
+    }
+  ],
+  "1": [
+    {
+      "text": "Mother, they're still not sure it is a baby!",
+      "image": {
+        "alt": "Eraserhead baby",
+        "src": "imgs/eraserhead.png",
+        "classes": []
+      }
+    },
+    {
+      "text": "Our beautiful baby girl.",
+      "image": {
+        "alt": "Crying cat",
+        "src": "imgs/crying.jpg",
+        "classes": []
+      }
+    },
+    {
+      "text": "You're born naked and everything you put on after that is drag. - RuPaul"
+    }
+  ]
+}
