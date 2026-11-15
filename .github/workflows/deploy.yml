@@ -1,0 +1,87 @@
+name: Deploy to S3
+
+# Publishes the game to https://trippyhippies.org/trans-game/ with s3deploy
+# (https://github.com/bep/s3deploy), authenticating to AWS through GitHub OIDC.
+#
+# Repository variables (Settings > Secrets and variables > Actions > Variables):
+#   AWS_ROLE_ARN                 required, IAM role GitHub assumes via OIDC
+#   AWS_REGION                   optional, defaults to us-east-1
+#   S3_BUCKET                    optional, defaults to trippyhippies.org
+#   CLOUDFRONT_DISTRIBUTION_ID   optional, invalidates the CDN cache after upload
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  S3DEPLOY_VERSION: 2.16.0
+  SITE_PATH: trans-game/
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stage site files
+        run: |
+          mkdir _site
+          cp -R index.html index.js stylesheets imgs data sound _site/
+          find _site -name .DS_Store -delete
+          find _site -type f | sort
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: _site
+          if-no-files-found: error
+
+  deploy:
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: _site
+
+      - name: Install s3deploy
+        run: |
+          base="https://github.com/bep/s3deploy/releases/download/v${S3DEPLOY_VERSION}"
+          tarball="s3deploy_${S3DEPLOY_VERSION}_linux-amd64.tar.gz"
+          curl -fsSLO "$base/$tarball"
+          curl -fsSLO "$base/s3deploy_${S3DEPLOY_VERSION}_checksums.txt"
+          sha256sum -c --ignore-missing "s3deploy_${S3DEPLOY_VERSION}_checksums.txt"
+          tar -xzf "$tarball" s3deploy
+          sudo install s3deploy /usr/local/bin/s3deploy
+          s3deploy -V
+
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+
+      - name: Deploy
+        env:
+          BUCKET: ${{ vars.S3_BUCKET || 'trippyhippies.org' }}
+          REGION: ${{ vars.AWS_REGION || 'us-east-1' }}
+          DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+        run: |
+          args=(-source _site -bucket "$BUCKET" -region "$REGION" -path "$SITE_PATH" -v)
+          if [ -n "$DISTRIBUTION_ID" ]; then
+            args+=(-distribution-id "$DISTRIBUTION_ID")
+          fi
+          s3deploy "${args[@]}"
