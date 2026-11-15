@@ -39,3 +39,27 @@
 
   I do find this to be more accurate to our experience than Conway's life.  In Conway's you choose the start state
   of the universe and let it run.  But, we don't choose our start.  And our start binds our choices, until we really have none.
+
+
+## Deployment
+
+Every push to `main` publishes the game to https://trippyhippies.org/trans-game/
+with [s3deploy](https://github.com/bep/s3deploy) (`.github/workflows/deploy.yml`).
+Pull requests only check that the site files can be staged. The workflow signs in
+to AWS with GitHub OIDC, so no AWS keys are stored in GitHub. Set these repository
+variables (Settings > Secrets and variables > Actions > Variables); all four are
+required and the deploy fails if one is missing:
+
+- `AWS_ROLE_ARN`: the IAM role to assume. Its trust policy should allow
+  `token.actions.githubusercontent.com` with audience `sts.amazonaws.com` and subject
+  `repo:ksell8/kurts-trans-game-of-life:ref:refs/heads/main`.
+- `AWS_REGION`: the bucket's region.
+- `S3_BUCKET`: the bucket to upload to.
+- `CLOUDFRONT_DISTRIBUTION_ID`: the CloudFront distribution in front of the site
+  (`E32MLR8T1N3H7C`); its cache is invalidated after every deploy.
+
+The role needs `s3:ListBucket` and `s3:GetBucketLocation` on the bucket,
+`s3:PutObject`, `s3:PutObjectAcl` and `s3:DeleteObject` on `trans-game/*`, and
+`cloudfront:GetDistribution` and `cloudfront:CreateInvalidation` on the distribution.
+s3deploy only touches files under `trans-game/` and removes ones that are no longer
+in the repo.

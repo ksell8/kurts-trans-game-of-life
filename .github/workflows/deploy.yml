@@ -1,0 +1,115 @@
+name: Deploy to S3
+
+# Publishes the game to https://trippyhippies.org/trans-game/ with s3deploy
+# (https://github.com/bep/s3deploy), authenticating to AWS through GitHub OIDC.
+#
+# Repository variables (Settings > Secrets and variables > Actions > Variables):
+#   AWS_ROLE_ARN                 IAM role GitHub assumes via OIDC
+#   AWS_REGION                   region of the bucket
+#   S3_BUCKET                    bucket to upload to
+#   CLOUDFRONT_DISTRIBUTION_ID   distribution whose cache is invalidated after upload
+# All four are required: the deploy job fails if any of them is not set.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  S3DEPLOY_VERSION: 2.16.0
+  SITE_PATH: trans-game/
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stage site files
+        run: |
+          mkdir _site
+          cp -R index.html index.js stylesheets imgs data sound _site/
+          find _site -type f | sort
+
+      - name: Report missing repository variables
+        env:
+          AWS_ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+          AWS_REGION: ${{ vars.AWS_REGION }}
+          S3_BUCKET: ${{ vars.S3_BUCKET }}
+          CLOUDFRONT_DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+        run: |
+          for name in AWS_ROLE_ARN AWS_REGION S3_BUCKET CLOUDFRONT_DISTRIBUTION_ID; do
+            if [ -z "${!name}" ]; then
+              echo "::warning::Repository variable $name is not set; the deploy job will fail."
+            else
+              echo "$name is set"
+            fi
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: _site
+          if-no-files-found: error
+
+  deploy:
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Check repository variables
+        env:
+          AWS_ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+          AWS_REGION: ${{ vars.AWS_REGION }}
+          S3_BUCKET: ${{ vars.S3_BUCKET }}
+          CLOUDFRONT_DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+        run: |
+          missing=0
+          for name in AWS_ROLE_ARN AWS_REGION S3_BUCKET CLOUDFRONT_DISTRIBUTION_ID; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Repository variable $name is not set (Settings > Secrets and variables > Actions > Variables)."
+              missing=1
+            fi
+          done
+          exit "$missing"
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: _site
+
+      - name: Install s3deploy
+        run: |
+          base="https://github.com/bep/s3deploy/releases/download/v${S3DEPLOY_VERSION}"
+          tarball="s3deploy_${S3DEPLOY_VERSION}_linux-amd64.tar.gz"
+          curl -fsSLO "$base/$tarball"
+          curl -fsSLO "$base/s3deploy_${S3DEPLOY_VERSION}_checksums.txt"
+          sha256sum -c --ignore-missing "s3deploy_${S3DEPLOY_VERSION}_checksums.txt"
+          tar -xzf "$tarball" s3deploy
+          sudo install s3deploy /usr/local/bin/s3deploy
+          s3deploy -V
+
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Deploy
+        env:
+          BUCKET: ${{ vars.S3_BUCKET }}
+          REGION: ${{ vars.AWS_REGION }}
+          DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+        run: |
+          s3deploy -source _site -bucket "$BUCKET" -region "$REGION" \
+            -path "$SITE_PATH" -distribution-id "$DISTRIBUTION_ID" -v
