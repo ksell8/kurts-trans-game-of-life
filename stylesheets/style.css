@@ -243,8 +243,10 @@ img, video {
     to { opacity: 1 }
 }
 
-/* Hidden on screen but read by screen readers (the #announcer live region). */
-.sr-only {
+/* Hidden on screen but read by screen readers (#announcer and the accessibility note).
+   .visually-hidden is the old name, kept so a stale cached index.html still hides its note. */
+.sr-only,
+.visually-hidden {
     position: absolute !important;
     width: 1px;
     height: 1px;

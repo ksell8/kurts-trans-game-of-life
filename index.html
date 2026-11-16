@@ -13,6 +13,12 @@
 <body style="margin:0; padding:0;">
     <!-- Screen readers announce the game's dynamic text from here (see announce() in index.js). -->
     <div id="announcer" aria-live="polite" class="sr-only"></div>
+    <!-- Read by screen readers in normal page order, hidden on screen, never sent through #announcer. -->
+    <section id="a11y_note" class="sr-only" aria-labelledby="a11y_heading">
+        <h2 id="a11y_heading">Accessibility note</h2>
+        <p>Accessibility matters. This game shows its story as text that fades in and is then removed, which doesn't work for everyone, so screen readers read each line out loud as it appears.</p>
+        <p>If anything in this game is hard to use with a screen reader, a keyboard or any other assistive technology, please report it to <a href="mailto:kurt.sell8@gmail.com?subject=A11y%20issue%20in%20The%20Game%20of%20LIFE">kurt.sell8@gmail.com</a>.</p>
+    </section>
     <div id="game_play" class="game" hidden aria-hidden="true">
         <div id="soy_trans_response"></div>
     </div>

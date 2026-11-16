@@ -114,3 +114,15 @@ jobs:
           S3DEPLOY_PATH: ${{ env.SITE_PATH }}
         with:
           args: -distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} -v
+
+      # s3deploy invalidates the keys it uploaded, which may not cover the
+      # directory URL (/trans-game/) or other cached copies. Invalidate the
+      # whole site path so every deploy is visible right away.
+      - name: Invalidate CloudFront cache for the site path
+        env:
+          CLOUDFRONT_DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" \
+            --paths "/${SITE_PATH}*" \
+            --query 'Invalidation.[Id,Status]' --output text

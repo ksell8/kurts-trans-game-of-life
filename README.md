@@ -68,7 +68,7 @@ required and the deploy fails if one is missing:
 - `AWS_REGION`: the bucket's region.
 - `S3_BUCKET`: the bucket to upload to.
 - `CLOUDFRONT_DISTRIBUTION_ID`: the CloudFront distribution in front of the site
-  (`E32MLR8T1N3H7C`); its cache is invalidated after every deploy.
+  (`E32MLR8T1N3H7C`); its cache for `/trans-game/*` is invalidated after every deploy.
 
 The role needs `s3:ListBucket` and `s3:GetBucketLocation` on the bucket,
 `s3:PutObject`, `s3:PutObjectAcl` and `s3:DeleteObject` on `trans-game/*`, and
