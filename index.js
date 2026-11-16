@@ -350,6 +350,7 @@ function setSoyTransResponse(response){
     }
     newElement.innerText = response.text
     responseDoc.appendChild(newElement)
+    announce(response.text)
     newElement.scrollIntoView({behavior: "smooth", block: "start"})
 }
 
@@ -489,7 +490,7 @@ function i_fucking_hate_being_alive(){
             h1Element = add_h1(game_opening,
                 text,
                 ["devil", "typewriter"]);
-            // the whole story is already in #a11y_narration, so screen readers skip the fading copy
+            // announced through #announcer by add_h1, so screen readers skip the fading copy
             h1Element.ariaHidden = "true";
         },
             i*5000)
@@ -522,9 +523,22 @@ function you_gotta_be_fucking_kidding(){
     setTimeout(()=>{austin_powers(video);}, 4000)
 }
 
+// Screen readers read new text out loud through the aria-live="polite" #announcer
+// region (issue #11). The text is cleared first and set on the next tick so the
+// same line twice in a row (e.g. "NO!") is still announced.
+function announce(text){
+    const announcer = document.getElementById("announcer")
+    if(!announcer || !text){
+        return
+    }
+    announcer.textContent = ""
+    setTimeout(() => { announcer.textContent = text }, 50)
+}
+
 function add_h1(element, innerText, classes){
     const h1 = document.createElement("h1")
     h1.innerText = innerText
+    announce(innerText)
     if(classes){
         h1.classList.add(...classes)
     }
@@ -560,8 +574,8 @@ function add_image(element, image_source, alt_text, width= 100, classes=[]){
     return image
 }
 
-// The text that fades in and gets removed (scary_text) is also written out once in the
-// visually-hidden #a11y_narration block (see fill_a11y_story), and the fading copies are aria-hidden.
+// Text added while playing is announced through the #announcer live region (see announce());
+// the fading copies of scary_text are aria-hidden so they aren't read twice.
 // TODO: test with a screen reader and a friend who should use a screen reader but doesn't and can't see the fucking screen
 // I think the text will have to change.  Just make the background not see through
 // This is a must do before I show anyone
@@ -645,14 +659,3 @@ function opening(index=0, source){
         you_gotta_be_fucking_kidding();
     }
 }
-
-// writes the story into the visually-hidden accessibility block so it can be read without the fade in
-function fill_a11y_story(){
-    const story = document.getElementById("a11y_story")
-    for(const text of scary_text){
-        const li = document.createElement("li")
-        li.innerText = text
-        story.appendChild(li)
-    }
-}
-fill_a11y_story()

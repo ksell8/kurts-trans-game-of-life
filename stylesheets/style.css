@@ -243,8 +243,8 @@ img, video {
     to { opacity: 1 }
 }
 
-/* Hidden on screen but read by screen readers (the accessibility note and full story). */
-.visually-hidden {
+/* Hidden on screen but read by screen readers (the #announcer live region). */
+.sr-only {
     position: absolute !important;
     width: 1px;
     height: 1px;
