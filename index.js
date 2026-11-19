@@ -210,6 +210,7 @@ function isUDead(){
         const game_over = document.getElementById("game_over")
         game_over.hidden = false
         game_over.ariaHidden = "false"
+        document.body.classList.remove("game-mode")
 
         let age = getAge()
         if(age > 69){
@@ -471,6 +472,8 @@ function play_on(){
     const stats_panel = document.getElementById("stats_panel")
     stats_panel.hidden = false
     stats_panel.ariaHidden = "false"
+    // game mode: no double-tap zoom while mashing the buttons on phones (see style.css)
+    document.body.classList.add("game-mode")
     // u got one shot cabrón
     generational_wealth()
 

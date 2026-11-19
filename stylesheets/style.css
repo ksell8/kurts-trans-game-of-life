@@ -255,3 +255,11 @@ img, video {
     white-space: nowrap;
     border: 0;
 }
+
+/* Game mode (set by play_on() in index.js, cleared at game over): tapping the
+   buttons quickly on a phone shouldn't trigger double-tap zoom. "manipulation"
+   still allows scrolling and pinch zoom. */
+body.game-mode,
+body.game-mode button {
+    touch-action: manipulation;
+}
